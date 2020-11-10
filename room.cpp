@@ -1,3 +1,4 @@
+#include <iostream>
 #include <cstring>
 #include "room.h"
 
@@ -8,10 +9,13 @@ room::room(char *name1, char* description1, int id1, int* exit1){
   strcpy(name, name1);
   strcpy(description, description1);
   id = id1;
+  //int *temp_exit = exit1;
   for(int i = 0; i<4; i++)
   {
     exit[i] = exit1[i];
+    //cout << exit[i];
   }
+  //cout << endl;
 }
 room::~room(){
   *name = NULL;
@@ -52,6 +56,7 @@ void room::drop_item(item * item1){
   for(int i = 0; i < 5; i++){
     if(items[i] == NULL){
       items[i] = item1;
+      break;
     }
   }
 
@@ -59,6 +64,7 @@ void room::drop_item(item * item1){
 
 item *room::pickup_item(char *item_name){
   item *temp_item;
+  cout << "Item you are trying to pickup"<< item_name << endl;
   for(int i = 0; i < 5; i++){
     if(strcmp(items[i]->getname(), item_name)== 0){
       temp_item = items[i];

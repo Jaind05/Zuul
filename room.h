@@ -20,7 +20,7 @@ public:
   
 private:
   char name [100];
-  char description[100];
+  char description[200];
   int id; //1 through 15
   int exit[4];  // 0 = North , 1 = EAST, 2= South, 3 = west 
   //int num_items;
