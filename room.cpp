@@ -66,9 +66,11 @@ item *room::pickup_item(char *item_name){
   item *temp_item;
   cout << "Item you are trying to pickup"<< item_name << endl;
   for(int i = 0; i < 5; i++){
-    if(strcmp(items[i]->getname(), item_name)== 0){
-      temp_item = items[i];
-      items[i] = NULL;
+    if(items[i] != NULL){
+      if(strcmp(items[i]->getname(), item_name)== 0){
+	temp_item = items[i];
+	items[i] = NULL;
+      }
     }
   }
   return temp_item;

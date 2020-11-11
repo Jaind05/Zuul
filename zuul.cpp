@@ -52,7 +52,7 @@ int main() {
 						  {0, 0, 7, 0},
 						  {0, 5, 9, 0},
 						  {2, 6, 10, 4},
-						  {0, 7, 11, 5},
+ 						  {0, 7, 11, 5},
 						  {3, 0, 0, 6},
 						  {0, 9, 12, 0},
 						  {4, 10, 0, 8},
@@ -169,104 +169,109 @@ int move(room **roomdb, int currentlocation, item **picked){
 	cin >> input;
 	cout << input << endl;
 
-	
-
-	int tempoldlocation = currentlocation;
+	bool moved = true;
 	if(strcmp(input, "NORTH")==0){
-		
-		currentlocation = tempexits[0];
+	  cout << "0" << endl;
+	  if(tempexits[0]!= 0)
+	    currentlocation = (tempexits[0]-1);	  
 	}
 	else if(strcmp(input, "EAST")==0){
-		currentlocation = tempexits[1];
+	  cout << "1" << endl;
+	  if(tempexits[1]!= 0)
+	    currentlocation = (tempexits[1]-1);
 	}
 	else if(strcmp(input, "SOUTH")==0){
-		currentlocation = tempexits[2];
+	  cout << "2" << endl;
+	  if(tempexits[2]!= 0){
+	    cout << "2" << endl;
+	    currentlocation = (tempexits[2]-1);
+	  }
 	}
 	else if(strcmp(input, "WEST")==0){
-		currentlocation = tempexits[3];
+	  cout << "3" << endl;
+	  if(tempexits[3]!= 0)
+	    currentlocation = (tempexits[3]-1);
 	}
 	else if(strcmp(input, "pickup")==0){
-		item *t_item;
-		bool nothing = true;
-		cout << "Here are the items in this room:";
-		for (int k = 0; k < 5; k++)
-		{
-			t_item = temp->getitem(k);
-			if(t_item != NULL) {
-				cout << t_item->getname();
-				nothing = false;
-			}
-		}
-		if(nothing)
-			cout << "Oops no item here" << endl;
-		else
-			cout << "which item would you like to pick up?" << endl;
-		cin >> input;
-		
-		for(int l = 0; l < 5; l++)
-		{
-			if(picked[l] == NULL)
-			{
-				picked[l] = temp->pickup_item(input);
-				break;
-			}
-		}
+	  item *t_item;
+	  moved = false;
+	  bool nothing = true;
+	  cout << "Here are the items in this room: ";
+	  for (int k = 0; k < 5; k++)
+	    {
+	      t_item = temp->getitem(k);
+	      if(t_item != NULL) {
+		cout << t_item->getname() << endl;
+		nothing = false;
+	      }
+	    }
+	  if(nothing){
+	    cout << "Oops no item here" << endl;
+	  }
+	  else{
+	    cout << "which item would you like to pick up?" << endl;
+	    cin >> input;
+	    for(int l = 0; l < 5; l++)
+            {
+              if(picked[l] == NULL)
+                {
+                  picked[l] = temp->pickup_item(input);
+		  break;
+                }
+            }
+	  }
 	}
 	else if(strcmp(input, "drop")==0){
-		cout << "which item would you like to drop?" <<endl;
-		cout << "this is the list of items you are carrying:" << endl;
-		for(int l = 0; l < 5; l++)
+	  moved = false;
+	  cout << "which item would you like to drop?" <<endl;
+	  cout << "this is the list of items you are carrying:" << endl;
+	  for(int l = 0; l < 5; l++)
+	    {
+	      if(picked[l] != NULL)
+		cout << picked[l]->getname() << endl;
+	    }
+	  cin >> input;
+	  
+	  
+	  item *temp_drop_item = NULL;
+	  
+	  for(int l = 0; l < 5; l++)
+	    {
+	      if(strcmp(input, picked[l]->getname())==0)
 		{
-			if(picked[l] != NULL)
-				cout << picked[l]->getname() << endl;
+		  temp_drop_item = picked[l];
+		  picked[l] = NULL;
+		  break;
+		  
 		}
-		cin >> input;
-		
-		
-		item *drop_item = NULL;
-		
-		for(int l = 0; l < 5; l++)
+	      else
 		{
-			if(input == picked[l]->getname())
-			{
-				drop_item = picked[l];
-				picked[l] = NULL;
-			}
-			else
-			{
-				cout << "no such item" << endl;
-			}
-			
+		  cout << "no such item" << endl;
 		}
-		temp->drop_item(drop_item);
+	      
+	    }
+	  temp->drop_item(temp_drop_item);
 	}
 	else if(strcmp(input,"QUIT")==0){
-			return 100;
+	  return 100;
 	}
-	if(currentlocation != 0) {
-		currentlocation = currentlocation -1;
-		//cout << "new location"<< currentlocation;
-		return currentlocation;
-	} else {
-		cout << "No exit here" << endl;
-		return tempoldlocation;	
-	}
+	return currentlocation;
 }
 
 bool wincheck(item **itemdb){
-	int num_picked_items = 0;
-	for (int i = 0; i << 5; i++)
-	{
-		if(itemdb[i] != NULL)
-			num_picked_items++;
-	}
-	if(num_picked_items == 5){
-		cout << "Great job you have WON!!";
-		return true;
-	}
-	else{
-		cout << "keep playing you have " << num_picked_items << "so far" << endl;
-		return false;
-	} 
-	return false;
+  int num_picked_items = 0;
+  for (int i = 0; i < 5; i++)
+    {
+      if(itemdb[i] != NULL)
+	num_picked_items++;
+    }
+  if(num_picked_items == 5){
+    cout << "Great job you have WON!!";
+    return true;
+  }
+  else{
+    cout << "keep playing you have " << num_picked_items << " 1 item so far" << endl;
+    return false;
+  } 
+  return false;
 }
